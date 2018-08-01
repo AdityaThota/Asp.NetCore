@@ -1,0 +1,10 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap-datepicker": "v1.8.0"
+  },
+  "resolutions": {
+    "bootstrap-datepicker": "v1.8.0"
+  }
+}

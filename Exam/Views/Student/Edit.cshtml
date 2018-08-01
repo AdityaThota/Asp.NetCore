@@ -1,0 +1,94 @@
+﻿@model Exam.Models.Student
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<link href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+<h2>Edit</h2>
+
+<h4>Student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="PhotoPath" class="control-label"></label>
+                <input type="hidden" asp-for="PhotoPath" class="form-control" />
+                <span asp-validation-for="PhotoPath" class="text-danger"></span>
+                <br />
+                <img src="@Html.DisplayFor(model => model.PhotoPath)" height="150" width="150" alt="No photo" />
+            </div>
+            <hr />
+            <div class="fileUpload"></div>
+            <div class="info">Фото можливо буде змінити після збереження даних про студента</div>
+            @*<a asp-action="FileUpload" asp-route-id="@Model.Id" class="photoBtn btn btn-sm btn-default">Змінити фото</a>*@
+            <hr />
+
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" placeholder="Введіть ім'я"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" placeholder="Введіть прізвище" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthday" class="control-label"></label>
+                <input asp-for="Birthday" type="date" min="1970-01-01" class="form-control datepicker" placeholder="Введіть дату народження"/>
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mark" class="control-label"></label>
+                <input asp-for="Mark" type="number" class="form-control" placeholder="Введіть середній бал 1-12"/>
+                <span asp-validation-for="Mark" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+    <script src="~/lib/bootstrap-datepicker/js/locales/bootstrap-datepicker.uk.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $("input[type='date']").each(function () {
+                $(this).datepicker({ dateFormat: 'dd/mm/yy' })
+                    .get(0).setAttribute("type", "text");
+            });
+            @*if (@Model.Id==0) {
+                $('.photoBtn').addClass("hidden");
+            }
+            else {
+                $('.info').addClass("hidden");
+            }*@
+            if (@Model.Id!=0) {
+                $('.fileUpload').load('@Url.Action("FileUpload", "Student", new { Id=Model.Id})');
+                $('.info').addClass("hidden");
+            } 
+        });
+
+
+
+
+        var culture = "@System.Globalization.CultureInfo.CurrentCulture.Name".substr(0, 2);
+        $('.datepicker').datepicker({ language: culture, format: 'yyyy/mm/dd' });
+    </script>
+}

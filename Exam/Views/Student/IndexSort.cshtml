@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Exam.Models.Student>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <h2>Кращий студент:</h2>
+            <h2>@ViewBag.Student</h2>
+            <h2>Середній бал: @ViewBag.Mark</h2>
+        </div>
+
+        <div class="col-md-4">
+            <img src="@ViewBag.Photo" height="150" width="150" alt="No photo" />
+        </div>
+    </div>
+</div>
+<br />
+<p>
+    <a asp-action="Edit" class="btn btn-default">Добавити студента</a>
+</p>
+<div class="container-fluid">
+    <div class="container">
+        <div class="col-md-2">
+            <h3>@Html.DisplayNameFor(model => model.PhotoPath)</h3>
+        </div>
+        <div class="col-md-2">
+            <h3><a asp-action="IndexSort" asp-route-sortOrder="@ViewData["LastNameSortParm"]">@Html.DisplayNameFor(model => model.LastName)</a></h3>
+        </div>
+        <div class="col-md-2">
+            <h3><a asp-action="IndexSort" asp-route-sortOrder="@ViewData["FirstNameSortParm"]">@Html.DisplayNameFor(model => model.FirstName)</a></h3>
+        </div>
+        <div class="col-md-2">
+            <h3><a asp-action="IndexSort" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.Birthday)</a></h3>
+        </div>
+        <div class="col-md-1">
+            <h3><a asp-action="IndexSort" asp-route-sortOrder="@ViewData["MarkSortParm"]">@Html.DisplayNameFor(model => model.Mark)</a></h3>
+        </div>
+    </div>
+    <hr />
+    @foreach (var item in Model)
+    {
+        <div class="container">
+            <div class="col-md-2">
+                <img src="@Html.DisplayFor(model => item.PhotoPath)" height="100" width="100" alt="No photo" />
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(model => item.FirstName)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(model => item.LastName)
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(model => item.Birthday)
+            </div>
+            <div class="col-md-1">
+                @Html.DisplayFor(model => item.Mark)
+            </div>
+
+            <div class="col-md-3">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-default">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger delStudent" data-id="@item.Id">Delete</a>
+            </div>
+        </div>
+        <hr />
+    }
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('.delStudent').click(function (e) {
+                    if (confirm('Ви впевнені?'))
+                    {
+                        //return true; //Тільки по методу GET HTTP
+                        e.preventDefault(); //щоб не спрацьоував клік нв кнопку
+                        $.post('@Url.Action("Delete", "Student")', { id: $(this).attr("data-id") },
+                            function (data)
+                            {
+                                if (data == "OK")
+                                {
+                                    window.location.href = '@Url.Action("Index", "Student")';
+                                }
+                            });
+                    }
+                    else
+                    {
+                        e.preventDefault(); /*e.preventDefault() - відміняє виконання відгалудження*/
+                    }
+            });
+        });
+    </script>
+
+}

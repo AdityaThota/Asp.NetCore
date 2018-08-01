@@ -1,0 +1,21 @@
+﻿
+<div>
+    <form asp-cation="FileUpload" asp-controller="Student" method="post" enctype="multipart/form-data">
+        <input type="file" name="fileUpload" class="btn btn-default" /><br />
+        <input type="submit" name="Submit" id="SubmitSingle" value="Додати фото" class="btn btn-success" />
+    </form>
+</div>
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(function () {
+            $('#SubmitSingle').click(function () {
+                alert("Зображення успішно додано");
+            });
+        });
+    </script>
+
+}
